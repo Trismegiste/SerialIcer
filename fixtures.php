@@ -17,11 +17,13 @@ class Person extends Entity
 {
 
     protected $age;
+    protected $vector;
 
     public function __construct($str, $age)
     {
         parent::__construct($str);
         $this->age = $age;
+        $this->vector = [1, 4, 9, new \stdClass()];
     }
 
 }
