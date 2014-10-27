@@ -2,33 +2,54 @@
 
 require_once 'fixtures.php';
 
-function flattenObj($obj)
+class SerialIcer
 {
-    $flatten = function ($scope, array& $export) {
-                $refl = new \ReflectionClass($scope);
 
-                foreach ($refl->getProperties() as $prop) {
-                    if ($prop->class === $scope) {
-                        $key = $prop->name;
-                        $value = $this->$key;
-                        if (is_object($value)) {
-                            $value = flattenObj($value);
+    protected $reference = [];
+
+    private function getRecursionClosure()
+    {
+        $that = $this; // smells like javascript...
+
+        return function ($scope, array& $export) use ($that) {
+                    $refl = new \ReflectionClass($scope);
+
+                    foreach ($refl->getProperties() as $prop) {
+                        if ($prop->class === $scope) {
+                            $key = $prop->name;
+                            $value = $this->$key;
+                            if (is_object($value)) {
+                                $value = $that->flattenObj($value);
+                            }
+                            $export[$scope . '::' . $key] = $value;
                         }
-                        $export[$scope . '::' . $key] = $value;
                     }
-                }
-            };
+                };
+    }
 
-    $scope = get_class($obj);
-    $export = ['@class' => $scope, '@uuid' => spl_object_hash($obj)];
-    do {
-        $dump = \Closure::bind($flatten, $obj, $scope);
-        $dump($scope, $export);
-    } while ($scope = get_parent_class($scope));
+    public function flattenObj($obj)
+    {
+        $addr = spl_object_hash($obj);
+        if (array_key_exists($addr, $this->reference)) {
+            return ['@ref' => $addr];
+        }
+        $scope = get_class($obj);
+        $export = ['@class' => $scope, '@uuid' => $addr];
+        $this->reference[$addr] = true;
 
-    return $export;
+        $flatten = $this->getRecursionClosure();
+        do {
+            $dump = \Closure::bind($flatten, $obj, $scope);
+            $dump($scope, $export);
+        } while ($scope = get_parent_class($scope));
+
+        return $export;
+    }
+
 }
+
+$service = new SerialIcer();
 
 $obj = new Company(new Employee('toto', 13));
 
-print_r(flattenObj($obj));
+print_r($service->flattenObj($obj));

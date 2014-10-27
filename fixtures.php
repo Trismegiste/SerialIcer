@@ -38,13 +38,13 @@ class Employee extends Person
 
     use Additional;
 
-    protected $name;
+    protected $name; // name collision check
     protected $company;
 
     public function __construct($str, $age)
     {
         parent::__construct($str, $age);
-        $this->name = 'acme';
+        $this->name = 'developer';
     }
 
     public function setCompany(Company $c)
@@ -62,7 +62,7 @@ class Company
     public function __construct(Employee $boss)
     {
         $this->boss = $boss;
-     //   $this->boss->setCompany($this);
+        $this->boss->setCompany($this);
     }
 
 }
