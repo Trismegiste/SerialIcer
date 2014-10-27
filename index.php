@@ -5,6 +5,10 @@ require_once 'fixtures.php';
 class SerialIcer
 {
 
+    const CLASS_KEY = '@class';
+    const UUID_KEY = '@uuid';
+    const REF_KEY = '@ref';
+
     protected $reference = [];
 
     private function getRecursionClosure()
@@ -19,7 +23,7 @@ class SerialIcer
                             $key = $prop->name;
                             $value = $this->$key;
                             if (is_object($value)) {
-                                $value = $that->flattenObj($value);
+                                $value = $that->export($value);
                             }
                             $export[$scope . '::' . $key] = $value;
                         }
@@ -27,14 +31,14 @@ class SerialIcer
                 };
     }
 
-    public function flattenObj($obj)
+    public function export($obj)
     {
         $addr = spl_object_hash($obj);
         if (array_key_exists($addr, $this->reference)) {
-            return ['@ref' => $addr];
+            return [self::REF_KEY => $addr];
         }
         $scope = get_class($obj);
-        $export = ['@class' => $scope, '@uuid' => $addr];
+        $export = [self::CLASS_KEY => $scope, self::UUID_KEY => $addr];
         $this->reference[$addr] = true;
 
         $flatten = $this->getRecursionClosure();
@@ -52,4 +56,4 @@ $service = new SerialIcer();
 
 $obj = new Company(new Employee('toto', 13));
 
-print_r($service->flattenObj($obj));
+print_r($service->export($obj));

@@ -58,11 +58,16 @@ class Company
 {
 
     protected $boss;
+    protected $created;
+    protected $spl;
 
     public function __construct(Employee $boss)
     {
         $this->boss = $boss;
         $this->boss->setCompany($this);
+        $this->created = new \DateTime();
+        $this->spl = new SplObjectStorage();
+        $this->spl->attach(new \stdClass(), 123);
     }
 
 }
