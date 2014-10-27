@@ -140,6 +140,11 @@ class SerialIcer
                 };
     }
 
+    public function reset()
+    {
+        $this->reference = [];
+    }
+
 }
 
 $service = new SerialIcer();
@@ -148,6 +153,7 @@ $obj = new Company(new Employee('toto', 13));
 
 $export = $service->export($obj);
 print_r($export);
+$service->reset();
 $newObj = $service->create($export);
 print_r($obj);
 print_r($newObj);
