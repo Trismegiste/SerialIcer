@@ -67,9 +67,9 @@ class Company
     {
         $this->boss = $boss;
         $this->boss->setCompany($this);
-        $this->created = new \DateTime();
-        $this->spl = new SplObjectStorage();
-        $this->spl->attach(new \stdClass(), 123);
+//        $this->created = new \DateTime();
+//        $this->spl = new SplObjectStorage();
+//        $this->spl->attach(new \stdClass(), 123);
     }
 
 }

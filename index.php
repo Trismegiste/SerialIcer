@@ -66,7 +66,8 @@ class SerialIcer
             return $this->exportObj($mixed);
         }
 
-        throw new \RuntimeException("wtf");
+        //throw new \RuntimeException("wtf");
+        return null;
     }
 
     /**
@@ -98,9 +99,21 @@ class SerialIcer
                 $dump = \Closure::bind($hydrate, $obj, $scope);
                 $dump($scope, $import);
             } while ($scope = get_parent_class($scope));
+
+            return $obj;
+        } else {
+            $arr = [];
+            foreach ($import as $key => $value) {
+                if (is_array($value)) {
+                    $value = $this->create($value);
+                }
+                $arr[$key] = $value;
+            }
+
+            return $arr;
         }
 
-        return $obj;
+        throw new \RuntimeException('fail');
     }
 
     protected function instantiate($cls)
@@ -119,10 +132,7 @@ class SerialIcer
                         list($fqcn, $prop) = explode('::', $key);
                         if ($fqcn === $scope) {
                             if (is_array($value)) {
-                                if (array_key_exists($that::CLASS_KEY, $value) ||
-                                        array_key_exists($that::REF_KEY, $value)) {
-                                    $value = $that->create($value);
-                                }
+                                $value = $that->create($value);
                             }
                             $this->$prop = $value;
                         }
@@ -138,6 +148,6 @@ $obj = new Company(new Employee('toto', 13));
 
 $export = $service->export($obj);
 print_r($export);
-//$newObj = $service->create($export);
-//print_r($obj);
-//print_r($newObj);
+$newObj = $service->create($export);
+print_r($obj);
+print_r($newObj);
