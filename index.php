@@ -1,30 +1,6 @@
 <?php
 
-class Entity
-{
-
-    private $name;
-    protected $inherited = 7;
-
-    public function __construct($str)
-    {
-        $this->name = $str;
-    }
-
-}
-
-class Person extends Entity
-{
-
-    protected $age;
-
-    public function __construct($str, $age)
-    {
-        parent::__construct($str);
-        $this->age = $age;
-    }
-
-}
+require_once 'fixtures.php';
 
 function flattenObj($obj)
 {
@@ -44,7 +20,7 @@ function flattenObj($obj)
             };
 
     $scope = get_class($obj);
-    $export = ['@class' => $scope];
+    $export = ['@class' => $scope, '@uuid' => spl_object_hash($obj)];
     do {
         $dump = \Closure::bind($flatten, $obj, $scope);
         $dump($scope, $export);
@@ -53,6 +29,6 @@ function flattenObj($obj)
     return $export;
 }
 
-$obj = new Person('toto', 13);
+$obj = new Company(new Employee('toto', 13));
 
 print_r(flattenObj($obj));
