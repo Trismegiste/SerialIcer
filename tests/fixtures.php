@@ -1,5 +1,7 @@
 <?php
 
+namespace tests\Trismegiste\SerialIcer;
+
 class Entity
 {
 

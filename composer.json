@@ -1,0 +1,18 @@
+{
+    "name": "trismegiste/serialicer",
+    "description": "A recursive exporter/importer from object to array for JSON",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Trismegiste"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Trismegiste\\SerialIcer\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.4.3"
+    }
+}
