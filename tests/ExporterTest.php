@@ -54,7 +54,9 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidExportedClass($obj)
     {
-        $this->assertEquals(get_class($obj), $this->sut->export($obj)[Exporter::CLASS_KEY]);
+        $exported = $this->sut->export($obj);
+        $this->assertEquals(get_class($obj), $exported[Exporter::CLASS_KEY]);
+        $this->assertArrayHasKey(Exporter::UUID_KEY, $exported);
     }
 
     public function getSimpleObjProp()
@@ -74,10 +76,17 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleProp($obj, $prop, $value)
     {
-        print_r($obj);
         $exported = $this->sut->export($obj);
-        print_r($exported);
         $this->assertEquals($value, $exported[$prop], print_r($exported, true));
+    }
+
+    public function testTreeStructure()
+    {
+        $obj1 = new Person('Dave', 27);
+        $exported = $this->sut->export($obj1);
+        $this->assertEquals(9, $exported[get_class($obj1) . '::vector'][2]);
+        $this->assertArrayHasKey(Exporter::UUID_KEY, $exported[get_class($obj1) . '::vector'][3]);
+        $this->assertEquals('stdClass', $exported[get_class($obj1) . '::vector'][3][Exporter::CLASS_KEY]);
     }
 
 }
