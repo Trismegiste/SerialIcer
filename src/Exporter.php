@@ -1,7 +1,7 @@
 <?php
 
 /*
- * SerialEaser
+ * SerialIcer
  */
 
 namespace Trismegiste\SerialIcer;
@@ -14,7 +14,7 @@ class Exporter implements Serialization
 
     /**
      * Get the closure to export an object with a class scope
-     * 
+     *
      * @return \Closure
      */
     private function getExportClosure()

@@ -11,3 +11,5 @@ if (!$loader = @include __DIR__ . '/../vendor/autoload.php') {
 }
 
 $loader->addPsr4('tests\\Trismegiste\\SerialIcer\\', __DIR__, true);
+
+require_once __DIR__ . '/fixtures.php';

@@ -9,8 +9,6 @@ namespace tests\Trismegiste\SerialIcer;
 use Trismegiste\SerialIcer\Exporter;
 use Trismegiste\SerialIcer\Factory;
 
-require_once __DIR__ . '/fixtures.php';
-
 /**
  * Functional tests the complete process with real fixtures
  */

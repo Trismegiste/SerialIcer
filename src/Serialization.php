@@ -8,7 +8,7 @@ namespace Trismegiste\SerialIcer;
 
 /**
  * Serialization is a contract for ...
- * 
+ *
  * @author flo
  */
 interface Serialization
@@ -18,4 +18,5 @@ interface Serialization
     const UUID_KEY = '@uuid';
     const REF_KEY = '@ref';
 
+//    public function isSpecialClass($fqcn);
 }
