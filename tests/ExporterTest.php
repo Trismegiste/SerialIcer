@@ -112,4 +112,11 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($export[Exporter::UUID_KEY], $export['tests\Trismegiste\SerialIcer\Ouroboros::ref'][Exporter::REF_KEY]);
     }
 
+    public function testInjectedPropAreNotExportedBecauseItSux()
+    {
+        $obj = new \stdClass();
+        $obj->prop = 'arf';
+        $this->assertArrayNotHasKey('stdClass::prop', $this->sut->export($obj));
+    }
+
 }
