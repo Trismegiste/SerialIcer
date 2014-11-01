@@ -14,11 +14,11 @@ class Factory implements Serialization
 
     /**
      * Creates a object tree with the exported array
-     * 
+     *
      * @param array $import
-     * 
+     *
      * @return object
-     * 
+     *
      * @throws \RuntimeException
      */
     public function create(array $import, array& $ref = [])
@@ -69,16 +69,21 @@ class Factory implements Serialization
         $that = $this;
 
         return function($scope, array $data, array& $ref) use ($that) {
-                    foreach ($data as $key => $value) {
-                        list($fqcn, $prop) = explode('::', $key);
-                        if ($fqcn === $scope) {
-                            if (is_array($value)) {
-                                $value = $that->create($value, $ref);
-                            }
-                            $this->$prop = $value;
-                        }
+            foreach ($data as $key => $value) {
+                list($fqcn, $prop) = explode('::', $key);
+                if ($fqcn === $scope) {
+                    if (is_array($value)) {
+                        $value = $that->create($value, $ref);
                     }
-                };
+                    $this->$prop = $value;
+                }
+            }
+        };
+    }
+
+    public function isSpecialClass($fqcn)
+    {
+
     }
 
 }

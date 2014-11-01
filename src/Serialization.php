@@ -18,5 +18,5 @@ interface Serialization
     const UUID_KEY = '@uuid';
     const REF_KEY = '@ref';
 
-//    public function isSpecialClass($fqcn);
+    public function isSpecialClass($fqcn);
 }

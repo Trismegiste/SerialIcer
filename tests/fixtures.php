@@ -69,9 +69,6 @@ class Company
     {
         $this->boss = $boss;
         $this->boss->setCompany($this);
-//        $this->created = new \DateTime();
-//        $this->spl = new SplObjectStorage();
-//        $this->spl->attach(new \stdClass(), 123);
     }
 
 }
@@ -80,5 +77,22 @@ class Ouroboros
 {
 
     public $ref;
+
+}
+
+class InternalCompil
+{
+
+    protected $oneDate;
+    protected $oneArray;
+    protected $storage;
+
+    public function __construct()
+    {
+        $this->oneDate = new \DateTime();
+        $this->oneArray = new \ArrayObject([1, 4, 9]);
+        $this->storage = new \SplObjectStorage();
+        $this->storage->attach(new \stdClass(), 123);
+    }
 
 }

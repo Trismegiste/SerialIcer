@@ -12,6 +12,18 @@ namespace Trismegiste\SerialIcer;
 class Exporter implements Serialization
 {
 
+    protected $specialExporter = [];
+
+    public function __construct()
+    {
+        $this->addStrategy(new Transformer\DateTime());
+    }
+
+    public function addStrategy(Transformer\ClassExporter $exp)
+    {
+        $this->specialExporter[$exp->getFqcn()] = $exp;
+    }
+
     /**
      * Get the closure to export an object with a class scope
      *
@@ -43,11 +55,15 @@ class Exporter implements Serialization
         $export = [self::CLASS_KEY => $scope, self::UUID_KEY => $addr];
         $ref[$addr] = true;
 
-        $flatten = $this->getExportClosure();
-        do {
-            $dump = \Closure::bind($flatten, $obj, $scope);
-            $dump($scope, $export, $ref);
-        } while ($scope = get_parent_class($scope));
+        if ($this->isSpecialClass($scope)) {
+            $this->specialExporter[$scope]->export($obj, $export);
+        } else {
+            $flatten = $this->getExportClosure();
+            do {
+                $dump = \Closure::bind($flatten, $obj, $scope);
+                $dump($scope, $export, $ref);
+            } while ($scope = get_parent_class($scope));
+        }
 
         return $export;
     }
@@ -68,6 +84,11 @@ class Exporter implements Serialization
         }
 
         return null;
+    }
+
+    public function isSpecialClass($fqcn)
+    {
+        return array_key_exists($fqcn, $this->specialExporter);
     }
 
 }

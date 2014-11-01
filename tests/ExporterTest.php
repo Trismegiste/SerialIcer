@@ -112,11 +112,20 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($export[Exporter::UUID_KEY], $export['tests\Trismegiste\SerialIcer\Ouroboros::ref'][Exporter::REF_KEY]);
     }
 
-    public function testInjectedPropAreNotExportedBecauseItSux()
+    public function testInjectedPropAreNotExportedBecauseOOPIsNotFreePorn()
     {
         $obj = new \stdClass();
         $obj->prop = 'arf';
         $this->assertArrayNotHasKey('stdClass::prop', $this->sut->export($obj));
+    }
+
+    public function testEmbeddedSpecialClass()
+    {
+        $obj = new InternalCompil();
+        $exp = $this->sut->export($obj);
+        $date = $exp['tests\Trismegiste\SerialIcer\InternalCompil::oneDate'];
+        $fac = new \Trismegiste\SerialIcer\Transformer\DateTime();
+        print_r($fac->create($date));
     }
 
 }
