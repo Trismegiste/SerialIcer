@@ -22,15 +22,15 @@ class Exporter implements Serialization
         $that = $this; // smells like javascript...
 
         return function ($scope, array& $export, array& $ref) use ($that) {
-                    $refl = new \ReflectionClass($scope);
+            $refl = new \ReflectionClass($scope);
 
-                    foreach ($refl->getProperties() as $prop) {
-                        if ($prop->class === $scope) {
-                            $key = $prop->name;
-                            $export[$scope . '::' . $key] = $that->export($this->$key, $ref);
-                        }
-                    }
-                };
+            foreach ($refl->getProperties() as $prop) {
+                if ($prop->class === $scope) {
+                    $key = $prop->name;
+                    $export[$scope . '::' . $key] = $that->export($this->$key, $ref);  // '$this' is not what you think :)
+                }
+            }
+        };
     }
 
     public function exportObj($obj, array& $ref)

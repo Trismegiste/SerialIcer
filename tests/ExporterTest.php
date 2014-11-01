@@ -57,4 +57,27 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(get_class($obj), $this->sut->export($obj)[Exporter::CLASS_KEY]);
     }
 
+    public function getSimpleObjProp()
+    {
+        $obj0 = new Entity('hal9000');
+        $obj1 = new Person('Dave', 27);
+
+        return [
+            [$obj0, get_class($obj0) . '::name', 'hal9000'],
+            [$obj1, get_class($obj1) . '::age', 27],
+            [$obj1, get_class($obj0) . '::name', 'Dave'],
+        ];
+    }
+
+    /**
+     * @dataProvider getSimpleObjProp
+     */
+    public function testSimpleProp($obj, $prop, $value)
+    {
+        print_r($obj);
+        $exported = $this->sut->export($obj);
+        print_r($exported);
+        $this->assertEquals($value, $exported[$prop], print_r($exported, true));
+    }
+
 }
