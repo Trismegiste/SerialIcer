@@ -89,4 +89,27 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('stdClass', $exported[get_class($obj1) . '::vector'][3][Exporter::CLASS_KEY]);
     }
 
+    public function testBadType()
+    {
+        $ptr = fopen(__FILE__, 'r');
+        $this->assertNull($this->sut->export($ptr));
+    }
+
+    public function testReference()
+    {
+        $obj = new Company(new Employee('Li', 10));
+        $export = $this->sut->export($obj);
+        $reference = $export[get_class($obj) . '::boss'][__NAMESPACE__ . '\Employee::company'];
+        $this->assertArrayHasKey(Exporter::REF_KEY, $reference);
+        $this->assertEquals($export[Exporter::UUID_KEY], $reference[Exporter::REF_KEY]);
+    }
+
+    public function testAutoReference()
+    {
+        $obj = new Ouroboros();
+        $obj->ref = $obj; // how to crash most of serializers
+        $export = $this->sut->export($obj);
+        $this->assertEquals($export[Exporter::UUID_KEY], $export['tests\Trismegiste\SerialIcer\Ouroboros::ref'][Exporter::REF_KEY]);
+    }
+
 }

@@ -26,7 +26,7 @@ class FunctionalTest extends \PHPUnit_Framework_TestCase
 
     public function testComplete()
     {
-        $obj = new Company(new Employee('toto', 13));
+        $obj = new Company(new Employee('Li', 10));
         $export = $this->exporter->export($obj);
         $newObj = $this->factory->create($export);
         $this->assertEquals($obj, $newObj);

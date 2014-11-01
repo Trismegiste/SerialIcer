@@ -75,3 +75,10 @@ class Company
     }
 
 }
+
+class Ouroboros
+{
+
+    public $ref;
+
+}
