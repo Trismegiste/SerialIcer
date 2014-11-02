@@ -124,7 +124,23 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
         $obj = new InternalCompil();
         $exp = $this->sut->export($obj);
 
-        print_r($exp);
+        $date = $exp[get_class($obj) . '::oneDate'];
+        $this->assertEquals('DateTime', $date[Exporter::CLASS_KEY]);
+        $this->assertArrayHasKey('tz', $date);
+        $this->assertArrayHasKey('date', $date);
+
+        $splArray = $exp[get_class($obj) . '::oneArray'];
+        $this->assertEquals('ArrayObject', $splArray[Exporter::CLASS_KEY]);
+        $this->assertArrayHasKey('content', $splArray);
+        $this->assertCount(4, $splArray['content']);
+        $this->assertEquals($exp[Exporter::UUID_KEY], $splArray['content'][3][Exporter::REF_KEY]);
+
+        $splStorage = $exp[get_class($obj) . '::storage'];
+        $this->assertEquals('SplObjectStorage', $splStorage[Exporter::CLASS_KEY]);
+        $this->assertArrayHasKey('content', $splStorage);
+        $this->assertCount(1, $splStorage['content']);
+        $this->assertEquals($exp[Exporter::UUID_KEY], $splStorage['content'][0]['key'][Exporter::REF_KEY]);
+        $this->assertEquals(123, $splStorage['content'][0]['value']);
     }
 
 }
