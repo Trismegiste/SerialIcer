@@ -16,13 +16,32 @@ class Exporter implements Serialization
 
     public function __construct()
     {
-        $this->addStrategy(new Exporter\DateTime());
-        $this->addStrategy(new Exporter\ArrayObject());
+        $that = $this;
+
+        $this->addStrategy('DateTime', function ($scope, array& $export, array& $ref) {
+            $export['tz'] = $this->getTimezone()->getName();
+            $export['date'] = $this->format(\DateTime::ISO8601);
+        });
+
+        $this->addStrategy('ArrayObject', function ($scope, array& $export, array& $ref) use ($that) {
+            foreach ($this as $key => $value) {
+                $export['content'][$key] = $that->export($value, $ref);
+            }
+        });
+
+        $this->addStrategy('SplObjectStorage', function ($scope, array& $export, array& $ref) use ($that) {
+            foreach ($this as $key => $value) {
+                $export['content'][$key] = [
+                    'key' => $that->export($value, $ref),
+                    'value' => $that->export($this->getInfo(), $ref)
+                ];
+            }
+        });
     }
 
-    public function addStrategy(Exporter\ClassExporter $exp)
+    public function addStrategy($fqcn, \Closure $exp)
     {
-        $this->specialExporter[$exp->getFqcn()] = $exp;
+        $this->specialExporter[$fqcn] = $exp;
     }
 
     /**
@@ -57,15 +76,15 @@ class Exporter implements Serialization
         $ref[$addr] = true;
 
         if ($this->isSpecialClass($scope)) {
-            $prop = $this->specialExporter[$scope]->extract($obj);
-            $export = array_merge($export, $this->export($prop, $ref));
+            $closure = $this->specialExporter[$scope];
         } else {
-            $flatten = $this->getExportClosure();
-            do {
-                $dump = \Closure::bind($flatten, $obj, $scope);
-                $dump($scope, $export, $ref);
-            } while ($scope = get_parent_class($scope));
+            $closure = $this->getExportClosure();
         }
+
+        do {
+            $dump = \Closure::bind($closure, $obj, $scope);
+            $dump($scope, $export, $ref);
+        } while ($scope = get_parent_class($scope));
 
         return $export;
     }

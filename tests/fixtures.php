@@ -90,7 +90,7 @@ class InternalCompil
     public function __construct()
     {
         $this->oneDate = new \DateTime();
-        $this->oneArray = new \ArrayObject([1, 4, 9]);
+        $this->oneArray = new \ArrayObject([1, 4, 9, new \stdClass()]);
         $this->storage = new \SplObjectStorage();
         $this->storage->attach(new \stdClass(), 123);
     }
