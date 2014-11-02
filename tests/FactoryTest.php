@@ -35,4 +35,18 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('2014-11-02T18:21:53+0100', $obj->format(\DateTime::ISO8601));
     }
 
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage 149
+     */
+    public function testMissingReference()
+    {
+        $fail = ['@class' => 'stdClass',
+            '@uuid' => '0000000071f0b30a00000000207a2a14',
+            'stdClass::loop' => ['@ref' => 149]
+        ];
+
+        $this->sut->create($fail);
+    }
+
 }

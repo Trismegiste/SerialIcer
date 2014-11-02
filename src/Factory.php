@@ -6,8 +6,6 @@
 
 namespace Trismegiste\SerialIcer;
 
-use SplObjectStorage;
-
 /**
  * Factory is the bijection of Exporter
  */
