@@ -58,6 +58,13 @@ class Exporter extends Visitor
         };
     }
 
+    /**
+     * Do not call this method, call export() instead
+     *
+     * @param object $obj
+     * @param array $ref
+     * @return array
+     */
     public function exportObj($obj, array& $ref)
     {
         $addr = spl_object_hash($obj);
@@ -82,6 +89,21 @@ class Exporter extends Visitor
         return $export;
     }
 
+    /**
+     * Export anything (scalar, object...) without any object types,
+     * only scalars and arrays :
+     * null => null
+     * '123' => '123'
+     * [1,4,9] => [1,4,9]
+     * new stdClass() => ['@uuid' => '...', '@class' => 'stdClass']
+     *
+     * Supports also SplObjectStorage, DateTime, ArrayObject
+     *
+     * @param mixed $mixed
+     * @param array $ref
+     * 
+     * @return mixed
+     */
     public function export($mixed, array& $ref = [])
     {
         if (is_scalar($mixed)) {

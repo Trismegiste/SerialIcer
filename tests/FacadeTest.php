@@ -1,42 +1,37 @@
 <?php
 
 /*
- * SerialEaser
+ * SerialIcer
  */
 
 namespace tests\Trismegiste\SerialIcer;
 
-use Trismegiste\SerialIcer\Exporter;
-use Trismegiste\SerialIcer\Factory;
-
 /**
- * Functional tests the complete process with real fixtures
+ * FacadeTest tests the complete process with real fixtures
  */
-class FunctionalTest extends \PHPUnit_Framework_TestCase
+class FacadeTest extends \PHPUnit_Framework_TestCase
 {
 
-    protected $exporter;
-    protected $factory;
+    protected $sut;
 
     protected function setUp()
     {
-        $this->exporter = new Exporter();
-        $this->factory = new Factory();
+        $this->sut = new \Trismegiste\SerialIcer\Facade();
     }
 
     public function testWithoutInternal()
     {
         $obj = new Company(new Employee('Li', 10));
-        $export = $this->exporter->export($obj);
-        $newObj = $this->factory->create($export);
+        $export = $this->sut->export($obj);
+        $newObj = $this->sut->create($export);
         $this->assertEquals($obj, $newObj);
     }
 
     public function testWithInternal()
     {
         $obj = new InternalCompil();
-        $export = $this->exporter->export($obj);
-        $newObj = $this->factory->create($export);
+        $export = $this->sut->export($obj);
+        $newObj = $this->sut->create($export);
 
         // date ok :
         $this->assertEquals($obj->oneDate->format(\DateTime::ISO8601), $newObj->oneDate->format(\DateTime::ISO8601));

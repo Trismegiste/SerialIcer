@@ -35,13 +35,14 @@ class Factory extends Visitor
     }
 
     /**
-     * Creates a object tree with the exported array
+     * Creates an (array of) object tree with the exported array
      *
-     * @param mixed $import
+     * @param mixed $import the value to "unserialize" (in a way)
+     * @param array $ref (an array of reference)
      *
-     * @return object
+     * @return mixed a scalar, an array or an object, or null
      *
-     * @throws \RuntimeException
+     * @throws \RuntimeException if a reference does not exist
      */
     public function create($import, array& $ref = [])
     {
