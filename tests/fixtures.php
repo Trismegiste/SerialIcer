@@ -83,9 +83,9 @@ class Ouroboros
 class InternalCompil
 {
 
-    protected $oneDate;
-    protected $oneArray;
-    protected $storage;
+    public $oneDate;
+    public $oneArray;
+    public $storage;
 
     public function __construct()
     {

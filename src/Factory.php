@@ -6,6 +6,8 @@
 
 namespace Trismegiste\SerialIcer;
 
+use SplObjectStorage;
+
 /**
  * Factory is the bijection of Exporter
  */
@@ -20,19 +22,35 @@ class Factory extends Visitor
             $this->modify($data['date']);
             $this->setTimezone(new \DateTimeZone($data['tz']));
         });
+
+        $this->addStrategy('ArrayObject', function($scope, array $data, array& $ref) use ($that) {
+            foreach ($data['content'] as $key => $value) {
+                $this[$key] = $that->create($value, $ref);
+            }
+        });
+
+        $this->addStrategy('SplObjectStorage', function($scope, array $data, array& $ref) use ($that) {
+            foreach ($data['content'] as $key => $assoc) {
+                $this->attach($that->create($assoc['key'], $ref), $that->create($assoc['value'], $ref));
+            }
+        });
     }
 
     /**
      * Creates a object tree with the exported array
      *
-     * @param array $import
+     * @param mixed $import
      *
      * @return object
      *
      * @throws \RuntimeException
      */
-    public function create(array $import, array& $ref = [])
+    public function create($import, array& $ref = [])
     {
+        if (is_scalar($import) || is_null($import)) {
+            return $import;
+        }
+
         if (array_key_exists(self::REF_KEY, $import)) {
             if (array_key_exists($import[self::REF_KEY], $ref)) {
                 return $ref[$import[self::REF_KEY]];
@@ -67,10 +85,7 @@ class Factory extends Visitor
 
         $arr = [];
         foreach ($import as $key => $value) {
-            if (is_array($value)) {
-                $value = $this->create($value, $ref);
-            }
-            $arr[$key] = $value;
+            $arr[$key] = $this->create($value, $ref);
         }
 
         return $arr;
@@ -94,10 +109,7 @@ class Factory extends Visitor
             foreach ($data as $key => $value) {
                 list($fqcn, $prop) = explode('::', $key);
                 if ($fqcn === $scope) {
-                    if (is_array($value)) {
-                        $value = $that->create($value, $ref);
-                    }
-                    $this->$prop = $value;
+                    $this->$prop = $that->create($value, $ref);
                 }
             }
         };
