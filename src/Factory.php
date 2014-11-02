@@ -9,8 +9,18 @@ namespace Trismegiste\SerialIcer;
 /**
  * Factory is the bijection of Exporter
  */
-class Factory implements Serialization
+class Factory extends Visitor
 {
+
+    public function __construct()
+    {
+        $that = $this;
+
+        $this->addStrategy('DateTime', function($scope, array $data, array& $ref) {
+            $this->modify($data['date']);
+            $this->setTimezone(new \DateTimeZone($data['tz']));
+        });
+    }
 
     /**
      * Creates a object tree with the exported array
@@ -32,12 +42,21 @@ class Factory implements Serialization
         }
 
         if (array_key_exists(self::CLASS_KEY, $import)) {
+            // creation of the object :
             $scope = $import[self::CLASS_KEY];
             $obj = $this->instantiate($scope);
             $ref[$import[self::UUID_KEY]] = $obj;
             unset($import[self::CLASS_KEY]);
             unset($import[self::UUID_KEY]);
-            $hydrate = $this->getImportClosure();
+
+            // choose the right closure to inject properties
+            if ($this->isSpecialClass($scope)) {
+                $hydrate = $this->getStrategy($scope);
+            } else {
+                $hydrate = $this->getImportClosure();
+            }
+
+            // iterate over inheritance tree
             do {
                 $dump = \Closure::bind($hydrate, $obj, $scope);
                 $dump($scope, $import, $ref);
@@ -60,8 +79,11 @@ class Factory implements Serialization
     protected function instantiate($cls)
     {
         $refl = new \ReflectionClass($cls);
-
-        return $refl->newInstanceWithoutConstructor();
+        if ($this->isSpecialClass($cls)) {
+            return $refl->newInstance();
+        } else {
+            return $refl->newInstanceWithoutConstructor();
+        }
     }
 
     private function getImportClosure()
@@ -79,11 +101,6 @@ class Factory implements Serialization
                 }
             }
         };
-    }
-
-    public function isSpecialClass($fqcn)
-    {
-
     }
 
 }

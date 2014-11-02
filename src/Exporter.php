@@ -9,10 +9,8 @@ namespace Trismegiste\SerialIcer;
 /**
  * Exporter is a recursive exporter of object to array
  */
-class Exporter implements Serialization
+class Exporter extends Visitor
 {
-
-    protected $specialExporter = [];
 
     public function __construct()
     {
@@ -37,11 +35,6 @@ class Exporter implements Serialization
                 ];
             }
         });
-    }
-
-    public function addStrategy($fqcn, \Closure $exp)
-    {
-        $this->specialExporter[$fqcn] = $exp;
     }
 
     /**
@@ -76,7 +69,7 @@ class Exporter implements Serialization
         $ref[$addr] = true;
 
         if ($this->isSpecialClass($scope)) {
-            $closure = $this->specialExporter[$scope];
+            $closure = $this->getStrategy($scope);
         } else {
             $closure = $this->getExportClosure();
         }
@@ -105,11 +98,6 @@ class Exporter implements Serialization
         }
 
         return null;
-    }
-
-    public function isSpecialClass($fqcn)
-    {
-        return array_key_exists($fqcn, $this->specialExporter);
     }
 
 }
