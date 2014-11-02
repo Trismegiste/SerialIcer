@@ -12,7 +12,7 @@ namespace Trismegiste\SerialIcer\Exporter;
 interface ClassExporter
 {
 
-    public function export($object, array& $exported);
+    public function extract($object);
 
     public function getFqcn();
 }

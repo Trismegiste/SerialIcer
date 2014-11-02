@@ -12,10 +12,12 @@ namespace Trismegiste\SerialIcer\Exporter;
 class DateTime implements ClassExporter
 {
 
-    public function export($obj, array& $exported)
+    public function extract($obj)
     {
-        $exported['tz'] = $obj->getTimezone()->getName();
-        $exported['date'] = $obj->format(\DateTime::ISO8601);
+        return [
+            'tz' => $obj->getTimezone()->getName(),
+            'date' => $obj->format(\DateTime::ISO8601)
+        ];
     }
 
     public function getFqcn()

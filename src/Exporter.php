@@ -17,6 +17,7 @@ class Exporter implements Serialization
     public function __construct()
     {
         $this->addStrategy(new Exporter\DateTime());
+        $this->addStrategy(new Exporter\ArrayObject());
     }
 
     public function addStrategy(Exporter\ClassExporter $exp)
@@ -56,11 +57,8 @@ class Exporter implements Serialization
         $ref[$addr] = true;
 
         if ($this->isSpecialClass($scope)) {
-            $this->specialExporter[$scope]->export($obj, $export);
-            // il faut faire 3 trucs:
-            // - export devient extract et rend un tableau dans effet de bord
-            // - ce tableau est passé à $this->export
-            // - array_merge $export et $extract (ou alors clef content )
+            $prop = $this->specialExporter[$scope]->extract($obj);
+            $export = array_merge($export, $this->export($prop, $ref));
         } else {
             $flatten = $this->getExportClosure();
             do {
