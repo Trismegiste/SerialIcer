@@ -9,7 +9,7 @@ namespace Trismegiste\SerialIcer;
 /**
  * Facade is a facade for this serializer/unserializer library
  */
-class Facade
+class Facade implements SerialIcer
 {
 
     protected $exporter;
@@ -22,11 +22,7 @@ class Facade
     }
 
     /**
-     * Transforms all objects into arrays
-     *
-     * @param null|scalar|array|object $mixed
-     *
-     * @return null|scalar|array
+     * @inheritdoc
      */
     public function export($mixed)
     {
@@ -34,11 +30,7 @@ class Facade
     }
 
     /**
-     * Transforms all exported objects (which are tranformed into arrays) into new objects
-     *
-     * @param null|scalar|array $mixed
-     *
-     * @return null|scalar|array|object
+     * @inheritdoc
      */
     public function create($mixed)
     {

@@ -7,6 +7,7 @@ class Entity
 
     private $name;
     protected $inherited = 7;
+    protected $fµnnÿChàraçtér;
 
     public function __construct($str)
     {
