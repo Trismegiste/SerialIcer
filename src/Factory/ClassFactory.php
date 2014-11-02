@@ -4,7 +4,7 @@
  * SerialIcer
  */
 
-namespace Trismegiste\SerialIcer\Transformer;
+namespace Trismegiste\SerialIcer\Factory;
 
 /**
  * ClassFactory is a contract for creating one class type

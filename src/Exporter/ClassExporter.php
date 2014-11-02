@@ -4,7 +4,7 @@
  * SerialIcer
  */
 
-namespace Trismegiste\SerialIcer\Transformer;
+namespace Trismegiste\SerialIcer\Exporter;
 
 /**
  * ClassExporter is a contract for exporting one class type

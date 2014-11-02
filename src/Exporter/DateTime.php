@@ -4,12 +4,12 @@
  * SerialIcer
  */
 
-namespace Trismegiste\SerialIcer\Transformer;
+namespace Trismegiste\SerialIcer\Exporter;
 
 /**
  * DateTime is an exporter for DateTime
  */
-class DateTime implements ClassExporter, ClassFactory
+class DateTime implements ClassExporter
 {
 
     public function export($obj, array& $exported)
@@ -21,14 +21,6 @@ class DateTime implements ClassExporter, ClassFactory
     public function getFqcn()
     {
         return 'DateTime';
-    }
-
-    public function create(array $exported)
-    {
-        $newdate = \DateTime::createFromFormat(\DateTime::ISO8601, $exported['date']);
-        $newdate->setTimezone(new \DateTimeZone($exported['tz']));
-
-        return $newdate;
     }
 
 }

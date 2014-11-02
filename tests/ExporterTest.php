@@ -123,9 +123,8 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
     {
         $obj = new InternalCompil();
         $exp = $this->sut->export($obj);
-        $date = $exp['tests\Trismegiste\SerialIcer\InternalCompil::oneDate'];
-        $fac = new \Trismegiste\SerialIcer\Transformer\DateTime();
-        print_r($fac->create($date));
+
+        print_r($exp);
     }
 
 }
