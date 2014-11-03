@@ -70,7 +70,7 @@ class Factory extends Visitor
             if ($this->isSpecialClass($scope)) {
                 $hydrate = $this->getStrategy($scope);
             } else {
-                $hydrate = $this->getImportClosure();
+                $hydrate = $this->getDefaultStrategy();
             }
 
             // iterate over inheritance tree
@@ -100,7 +100,7 @@ class Factory extends Visitor
         }
     }
 
-    private function getImportClosure()
+    protected function getDefaultStrategy()
     {
         $that = $this;
 

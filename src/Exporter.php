@@ -42,7 +42,7 @@ class Exporter extends Visitor
      *
      * @return \Closure
      */
-    private function getExportClosure()
+    protected function getDefaultStrategy()
     {
         $that = $this; // smells like javascript...
 
@@ -78,7 +78,7 @@ class Exporter extends Visitor
         if ($this->isSpecialClass($scope)) {
             $closure = $this->getStrategy($scope);
         } else {
-            $closure = $this->getExportClosure();
+            $closure = $this->getDefaultStrategy();
         }
 
         do {
@@ -101,7 +101,7 @@ class Exporter extends Visitor
      *
      * @param mixed $mixed
      * @param array $ref
-     * 
+     *
      * @return mixed
      */
     public function export($mixed, array& $ref = [])

@@ -29,4 +29,5 @@ abstract class Visitor implements Serialization
         return $this->specialExporter[$fqcn];
     }
 
+    abstract protected function getDefaultStrategy();
 }
