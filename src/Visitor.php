@@ -26,7 +26,9 @@ abstract class Visitor implements Serialization
 
     protected function getStrategy($fqcn)
     {
-        return $this->specialExporter[$fqcn];
+        return array_key_exists($fqcn, $this->specialExporter) ?
+                $this->specialExporter[$fqcn] :
+                $this->getDefaultStrategy();
     }
 
     abstract protected function getDefaultStrategy();

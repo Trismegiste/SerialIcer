@@ -67,11 +67,7 @@ class Factory extends Visitor
             unset($import[self::UUID_KEY]);
 
             // choose the right closure to inject properties
-            if ($this->isSpecialClass($scope)) {
-                $hydrate = $this->getStrategy($scope);
-            } else {
-                $hydrate = $this->getDefaultStrategy();
-            }
+            $hydrate = $this->getStrategy($scope);
 
             // iterate over inheritance tree
             do {

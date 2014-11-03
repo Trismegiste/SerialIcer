@@ -75,11 +75,7 @@ class Exporter extends Visitor
         $export = [self::CLASS_KEY => $scope, self::UUID_KEY => $addr];
         $ref[$addr] = true;
 
-        if ($this->isSpecialClass($scope)) {
-            $closure = $this->getStrategy($scope);
-        } else {
-            $closure = $this->getDefaultStrategy();
-        }
+        $closure = $this->getStrategy($scope);
 
         do {
             $dump = \Closure::bind($closure, $obj, $scope);
