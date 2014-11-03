@@ -38,7 +38,7 @@ Secondary goal : JSON communication with a javascript client
 There is one class, a facade, named Facade.
 
 ```php
-/** here is a class which made every serializer mad : */
+/** here is a class which turns mad every serializer : */
 class Ouroboros
 {
     public $tail;
@@ -67,7 +67,7 @@ Array
 
 )
 ```
-Unlike the Universe' entropy, you can reverse the process :
+Unlike the entropy of the Universe, you can reverse the process :
 ```php
 $newObj = $convert->create($export);
 if ($newObj->tail === $newObj) {
@@ -75,7 +75,7 @@ if ($newObj->tail === $newObj) {
 }
 print_r($newObj);
 ```
-prints
+will print
 ```
 I think we have an infinite loop, sir
 Ouroboros Object
@@ -88,7 +88,7 @@ Ouroboros Object
 Another example :
 ```php
 /** example of private properties coming from parent class */
-class Zecret
+abstract class Zecret
 {
     private $name;
 
@@ -108,16 +108,20 @@ class Person extends Zecret
 }
 
 $person = new Person('Sheldon');
-print_r($convert->export($person));
+$export = $convert->export($person);
+print_r($export);
+$newPerson = $convert->create($export);
+echo $newPerson->getName() . "\n";
 ```
-prints
+will print
 ```
 Array
 (
     [@class] => Person
-    [@uuid] => 0000000030f7e15b000000002381f056
+    [@uuid] => 0000000001fef428000000001d72c3b4
     [Zecret::name] => Sheldon
 )
+Sheldon
 ```
 
 See the file named `fixtures.php` in the test directory.
@@ -127,7 +131,7 @@ Read the unit tests, 100% of code coverage by the way.
 If you need to inject this service into another service of yours,
 use the interface named `SerialIcer` for type-hinting information, as you know
 Liskov, NEVAR type-hint your method parameters with the concrete class Facade
-or you will fail at life and people will laugh at you when walking in the street.
+or you will fail at life and people will laugh at you when walking on the street.
 
 ## When
 
@@ -135,6 +139,10 @@ or you will fail at life and people will laugh at you when walking in the street
 of course, there is serialize() function, but not really readable for humans.
 * import/export with a client in json format (in progress)
 * comparison of objects (for tests and assertions)
+
+## TODO
+
+* transformer for mongoDB
 
 ### Finally
 

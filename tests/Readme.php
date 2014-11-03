@@ -28,7 +28,7 @@ if ($newObj->tail === $newObj) {
 print_r($newObj);
 
 /** example of private properties coming from parent class */
-class Zecret
+abstract class Zecret
 {
 
     private $name;
@@ -47,8 +47,10 @@ class Zecret
 
 class Person extends Zecret
 {
-
 }
 
 $person = new Person('Sheldon');
-print_r($convert->export($person));
+$export = $convert->export($person);
+print_r($export);
+$newPerson = $convert->create($export);
+echo $newPerson->getName() . "\n";
