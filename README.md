@@ -1,4 +1,4 @@
-# SerialIcer
+# SerialIcer [![Build Status](https://travis-ci.org/Trismegiste/SerialIcer.svg?branch=master)](https://travis-ci.org/Trismegiste/SerialIcer)
 
 A recursive un/serializer object &lt;-> array
 
