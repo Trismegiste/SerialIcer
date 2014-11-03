@@ -37,7 +37,8 @@ class ExporterTest extends \PHPUnit_Framework_TestCase
             [new \stdClass()],
             [new Entity('hal9000')],
             [new \DateTime()],
-            [new \ArrayObject()]
+            [new \ArrayObject()],
+            [new \SplObjectStorage()]
         ];
     }
 
