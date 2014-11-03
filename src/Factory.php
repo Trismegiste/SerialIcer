@@ -17,8 +17,8 @@ class Factory extends Visitor
         $that = $this;
 
         $this->addStrategy('DateTime', function($scope, array $data, array& $ref) {
-            $this->modify($data['date']);
             $this->setTimezone(new \DateTimeZone($data['tz']));
+            $this->modify($data['date']);
         });
 
         $this->addStrategy('ArrayObject', function($scope, array $data, array& $ref) use ($that) {
